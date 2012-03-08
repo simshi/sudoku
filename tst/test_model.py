@@ -72,10 +72,11 @@ sudoku_with_length_2_and_4 = """  34    ?    ?|   ?    ?    ?|   ?    ?    ?
    ?    ?    ?|   ?    ?    ?|   ?    ?    ?
 """
 
-empty_puzzle = "................................................................................."
+empty_puzzle_str = "................................................................................."
+perfect_puzzle_str = "123456789456789123789123456234567891567891234891234567345678912678912345912345678"
 class TestModel(unittest.TestCase):
     def setUp(self):
-        self.m = Model(empty_puzzle)
+        self.m = Model(empty_puzzle_str)
         
     def dump(self):
         print "==============="
@@ -100,7 +101,6 @@ class TestModel(unittest.TestCase):
 
     def test_one_with_length_2(self):
         self.m['1A'] = '34'
-        #self.dump()
         self.assertEqual(sudoku_with_length_2, str(self.m))
 
     def test_with_length_2_and_4(self):
@@ -108,7 +108,21 @@ class TestModel(unittest.TestCase):
         #self.dump()
         self.assertEqual(sudoku_with_length_2_and_4, str(self.m))
 
-
+    def test_empty_is_not_complete(self):
+        self.assertFalse(self.m.isComplete())
+    
+    def test_perfect_puzzle_is_complete(self):
+        model = Model(perfect_puzzle_str)
+        self.assertTrue(model.isComplete())
+    
+    def test_complete_state_can_be_changed(self):
+        model = Model(perfect_puzzle_str)
+        saved = model['3F']
+        model['3F'] = "45"
+        self.assertFalse(model.isComplete())
+        model['3F'] = saved
+        self.assertTrue(model.isComplete())
+    
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test_empty']
     unittest.main()

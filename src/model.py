@@ -35,5 +35,8 @@ class Model(dict):
     
     def __getitem__(self, key):
         return dict.__getitem__(self, key)
+    
+    def isComplete(self):
+        return all(len(v) == 1 for v in dict.itervalues(self))
  
         
