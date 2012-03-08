@@ -73,7 +73,6 @@ sudoku_with_length_2_and_4 = """  34    ?    ?|   ?    ?    ?|   ?    ?    ?
 """
 
 empty_puzzle_str = "................................................................................."
-perfect_puzzle_str = "123456789456789123789123456234567891567891234891234567345678912678912345912345678"
 class TestModel(unittest.TestCase):
     def setUp(self):
         self.m = Model(empty_puzzle_str)
@@ -111,17 +110,36 @@ class TestModel(unittest.TestCase):
     def test_empty_is_not_complete(self):
         self.assertFalse(self.m.isComplete())
     
+perfect_puzzle_str = "123456789456789123789123456234567891567891234891234567345678912678912345912345678"
+class TestModelCompleteCheck(unittest.TestCase): 
+    def setUp(self):
+        self.m = Model(perfect_puzzle_str)
+        
     def test_perfect_puzzle_is_complete(self):
-        model = Model(perfect_puzzle_str)
-        self.assertTrue(model.isComplete())
+        self.assertTrue(self.m.isComplete())
     
     def test_complete_state_can_be_changed(self):
-        model = Model(perfect_puzzle_str)
-        saved = model['3F']
-        model['3F'] = "45"
-        self.assertFalse(model.isComplete())
-        model['3F'] = saved
-        self.assertTrue(model.isComplete())
+        saved = self.m['3F']
+        self.m['3F'] = "45"
+        self.assertFalse(self.m.isComplete())
+        self.m['3F'] = saved
+        self.assertTrue(self.m.isComplete())
+
+    def test_row_is_not_complete(self):
+        saved_1 = self.m['1A'];  saved_2 = self.m['5A']; 
+        self.m['1A'] = saved_2;  self.m['5A'] = saved_1; 
+        self.assertFalse(self.m.isComplete())
+
+    def test_col_is_not_complete(self):
+        saved_1 = self.m['2C'];  saved_2 = self.m['2H']; 
+        self.m['2C'] = saved_2;  self.m['2H'] = saved_1; 
+        self.assertFalse(self.m.isComplete())
+
+    def test_block_is_not_complete(self):   
+        saved_1 = self.m['2C'];  saved_2 = self.m['3B']; 
+        self.m['2C'] = saved_2;  self.m['3B'] = saved_1; 
+        self.assertFalse(self.m.isComplete())
+
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test_empty']

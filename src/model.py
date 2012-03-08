@@ -9,6 +9,10 @@ class Model(dict):
     row_names_ = '123456789'
     col_names_ = 'ABCDEFGHI'
     all_cells_ = [row + col for row in row_names_ for col in col_names_]
+    all_row_keys_ = [[row+col for col in col_names_] for row in row_names_]
+    all_col_keys_ = [[row+col for row in row_names_] for col in col_names_]
+    all_block_keys_ = [[row+col for row in rows for col in cols] for rows in ('123','456','789') for cols in ('ABC','DEF','GHI')]
+    all_unit_keys_ = all_row_keys_ + all_col_keys_ + all_block_keys_
     
     def __init__(self, puzzle_str):
         setter = lambda (k, v):dict.__setitem__(self, k, v in self.__class__.digits_ and v or self.__class__.digits_)
@@ -36,7 +40,10 @@ class Model(dict):
     def __getitem__(self, key):
         return dict.__getitem__(self, key)
     
+    def _isUnitComplete(self, unit_keys):
+        return ''.join(sorted([dict.__getitem__(self, k) for k in unit_keys])) == self.digits_
+    
     def isComplete(self):
-        return all(len(v) == 1 for v in dict.itervalues(self))
+        return all(self._isUnitComplete(keys) for keys in self.all_unit_keys_)
  
         
