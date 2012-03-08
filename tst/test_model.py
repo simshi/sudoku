@@ -72,9 +72,10 @@ sudoku_with_length_2_and_4 = """  34    ?    ?|   ?    ?    ?|   ?    ?    ?
    ?    ?    ?|   ?    ?    ?|   ?    ?    ?
 """
 
+empty_puzzle = "................................................................................."
 class TestModel(unittest.TestCase):
     def setUp(self):
-        self.m = Model()
+        self.m = Model(empty_puzzle)
         
     def dump(self):
         print "==============="
