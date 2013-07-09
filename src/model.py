@@ -1,6 +1,8 @@
 '''
 Created on Feb 28, 2012
 
+@co-author: erizhang
+
 @author: simshi
 '''
 
